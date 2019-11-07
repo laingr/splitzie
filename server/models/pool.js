@@ -7,12 +7,24 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
-    workplaceId: DataTypes.INTEGER,
-    adminId: DataTypes.INTEGER,
-    open: DataTypes.BOOLEAN,
-    numInvited: DataTypes.INTEGER,
-    numAccepted: DataTypes.INTEGER,
-    numDeclined: DataTypes.INTEGER,
+    workplaceId: DataTypes.STRING,
+    adminId: DataTypes.STRING,
+    open: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    numInvited: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    numAccepted: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    numDeclined: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     budget: DataTypes.INTEGER,
     desc: DataTypes.STRING,
     closeDate: DataTypes.DATE

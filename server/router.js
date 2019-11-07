@@ -1,11 +1,9 @@
-const Koa = require('koa');
-const controllers = require('./controllers');
-const Router = require('koa-router');
+'use strict';
 
-const router = new Router();
+const express = require('express');
+const controllers = require('./controllers')
+const router = express.Router();
 
-router.post('/createPool', controllers.createPool);
-// router.post('/user', controller.createUser);
-// router.get('/user', controller.getUser);
+router.post('/slack/action', controllers.actionReceived);
 
 module.exports = router;
