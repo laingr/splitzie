@@ -27,8 +27,6 @@ module.exports = {
       channel: event.channel_id || event.channel
     });
   },
-  newPool:() => {
-  },
   askDesc: async (payload, text) => {
     const resp = await web.chat.postMessage({
       text: text,
@@ -38,22 +36,19 @@ module.exports = {
   askBudget: async (payload, text) => {
     await web.chat.postMessage({
       text: text,
-      channel: payload.channel
+      channel: payload.channel_id || payload.channel
     });
   },
   askDate: async (payload, text) => {
     await web.chat.postMessage({
-      text: text,
+      blocks: text,
       channel: payload.channel_id || payload.channel
     });
   },
-  confirmPool: async (payload, text) => {
-    await web.chat.postMessage({
-      text: text,
+  confirmPool: (payload, pool, text) => {
+    return web.chat.postMessage({
+      text: `${text} Splitzie for ${pool.desc} with budget $${pool.budget} due on ${pool.closeDate}`,
       channel: payload.channel_id || payload.channel
     });
-  },
-  invite:() => {
-    
-  },
+  } 
 }

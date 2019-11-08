@@ -29,7 +29,27 @@ exports.Welcome =
 	}
 ]
 
+exports.askDate =
+[
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "When do people have until to join in?."
+		},
+		"accessory": {
+			"type": "datepicker",
+			"initial_date": "2019-11-11",
+			"placeholder": {
+				"type": "plain_text",
+				"text": "Select a date",
+				"emoji": true
+			}
+		}
+	}
+]
+
 exports.askDesc = 'How would you describe this Splitzie?';
 exports.askBudget = 'How much is the total cost?';
-exports.askDate = 'Until when do people have to opt in or out?';
-exports.confirm = 'You are confirmed!';
+exports.confirm = `Perfect - I've created a `;
+exports.invite = `Now invite your friends by @'ing them. When you're done, say bye`;

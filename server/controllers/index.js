@@ -2,6 +2,7 @@
 
 const moment = require('moment');
 const pool = require('./pool');
+const invite = require('./invite');
 const response = require('./response');
 const models = require('../models');
 const messages = require('../messages');
@@ -11,45 +12,46 @@ exports.download = async (event) => {
 //install new user?  log(event);
 };
 
+//message events receiver
 exports.messageReceived = async (event) => {
-  if (!event.username) {
-    let last = await models.Log.findOne({
-    raw: true,
-    where: {
-      channel: event.channel
-    },
-    order: [['createdAt', 'DESC']]
-  });
-  if (!last) last = await log(event,event);
-  if (last.text === messages.Onboard.askDesc) pool.askBudget(event, last);
-  if (last.text === messages.Onboard.askBudget) pool.askDate(event, last);
-  if (last.text === messages.Onboard.askDate) pool.confirm(event, last);
-  if (!last || event.text === 'hi') await response.welcome(event);
-}
-const botLast = {
-  channel: 'user',
-  text: 'something'
-}
-  log(event, botLast);
+  if (!event.username) { //if not a bot
+    let last = await lastLog(event); //get message they're responding to
+    if (!last || event.text === 'hi') await response.welcome(event); //welcome flow
+    if (last.text === messages.Onboard.invite || event.text[0] === '<') invite.inviteToPool(event,last); //invite flow
+    ((Date.now() - last.ts) > 50000)?last.expired = true:last.expired = false; //determine expired time
+    if (!last.expired){ //create flow
+      if(last.text === messages.Onboard.askDesc) pool.askBudget(event, last);
+      else if(last.text === messages.Onboard.askBudget) pool.askDate(event, last);
+      else if(last.text === messages.Onboard.askDate) pool.confirm(event, last);
+      else response.text(event, messages.General.startOver)
+    }
+    else if (last.expired) response.text(event, messages.General.startOver);
+    else response.text(event, messages.General.unknown);
+  } else {
+    const botLast = {channel: 'user', text: 'something'};
+    log(event, botLast || last);
+}};
 
-};
-
+//action events receiver
 exports.actionReceived = async (req,res) => {
   let payload = JSON.parse(req.body.payload);
   res.status(200);
   res.send();
   payload.channel_id = payload.channel.id;
-  if (payload.callback_id === 'opt_in') {
-    const resp = await response.text(payload, messages.General.newPool);
+  if (payload.callback_id === 'create_new') { //non-block action create_new
+    await response.text(payload, messages.General.newPool);
     pool.newPool(payload);
   };
-  if (payload.callback_id === 'opt_out') response.text(payload, messages.General.dismiss);
-  if (payload.actions) {
+  if (payload.callback_id === 'say_hi') response.text(payload, messages.General.hi); //non-block action say_hi
+  if (payload.actions) { //used for all block actions
     let action = payload.actions;
     if (action[0].value === 'new_pool') {
-      await response.text(payload, messages.General.newPool);
+      const res = await response.text(payload, messages.General.newPool);
       pool.newPool(payload);
-    }  else response.text(payload, messages.General.unknown);
+    } else if (action[0].type === 'datepicker') {
+      pool.confirm(payload, action[0])
+    } 
+    else response.text(payload, messages.General.unknown);
   }
 };
 
@@ -57,6 +59,7 @@ exports.timedMessage = () => {
 
 };
 
+//message logger to db
 const log = async function (event, last) {
   const log = await models.Log.build( 
     { type: event.type,
@@ -74,6 +77,19 @@ const log = async function (event, last) {
     log.save();
 }
 
+const lastLog = function(event) {
+  return  models.Log.findOne({
+    raw: true,
+    where: {
+      channel: event.channel
+    },
+    order: [['createdAt', 'DESC']]
+  })
+};
+
+// const checkTime = function(event) {
+
+// }
 // exports.createUser = async function (ctx, next) {
 //   const user = await models.User.build(
 //     {authorName: ctx.request.body.authorName, authorId: false}
