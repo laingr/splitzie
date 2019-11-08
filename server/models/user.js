@@ -7,9 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
+    userId: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     workplaceId: DataTypes.INTEGER,
+    channelId: DataTypes.STRING,
     poolsInvited: DataTypes.ARRAY(DataTypes.INTEGER),
     poolsAccepted: DataTypes.ARRAY(DataTypes.INTEGER),
     poolsCompleted: DataTypes.ARRAY(DataTypes.INTEGER)

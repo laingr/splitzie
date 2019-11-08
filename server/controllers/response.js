@@ -50,5 +50,16 @@ module.exports = {
       text: `${text} Splitzie for ${pool.desc} with budget $${pool.budget} due on ${pool.closeDate}`,
       channel: payload.channel_id || payload.channel
     });
-  } 
+  },
+  getChannels: (user) => {
+    return web.im.open({
+      user: user
+    })
+  },
+  sendInvite: (invited, pool, text) => {
+    return web.chat.postMessage({
+      text: text,
+      channel: invited.channelId
+    });
+  },
 }

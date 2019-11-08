@@ -8,12 +8,11 @@ const pool =  require('./pool');
 module.exports = {
   inviteToPool: async (event, last) => {
     const pool = await findPool(event);
-    inviteParse(event.text);
-    //parse message
-    //push users to pool
-    //send user message
-    // await createPool(payload);
-    // response.askDesc(payload, messages.Onboard.askDesc);
+    const invites = inviteParse(event.text);
+    await addUsers(event, invites);
+    await addToPool(pool, invites);
+    const userData = await getInviteChannels(event, invites);
+    await inviteNewUsers(pool, userData);
   }
 }
 
@@ -28,15 +27,58 @@ const findPool = async function (payload) {
   return pool;
 }
 
-const updatePool = async function (payload, uuid, fieldToUpdate, value) {
-  const pool = await models.Pool.update( 
-    { [fieldToUpdate]: value },
-    { where: {uuid: uuid}}
-    )
-  }
+const inviteParse = function (text) {
+  const users = text.split(' ');
+  const userSplit = users.map(i=>i.slice(2,i.length-1));
+  return userSplit;
+}
 
-  const inviteParse = function (text) {
-    const users = text.split(' ');
-    console.log(users);
-    return users;
+const addUsers = async function (event, users) {
+  for (let i=0;i<users.length;i++){
+    await models.User.findOrCreate(
+    {
+      userId: users[i],
+      workplaceId: event.team.id,
+      // channelId: DataTypes.STRING,
+      poolsInvited: [],
+      poolsAccepted: [],
+      poolsCompleted: [],
+      where: { userId: users[i]}
+    });
+  return 'users added';
+  }};
+
+const addToPool = async function (pool, invites) {
+  const alreadyInvited = pool.invited;
+  invites.forEach(i=>alreadyInvited.push(i));
+  await models.Pool.update(
+    { invited: alreadyInvited },
+    { where: {uuid: pool.uuid}}
+  )
+  return alreadyInvited;
+}
+
+
+const getInviteChannels = async function (event, invites) {
+  const userData = [];
+  for (let i=0; i<invites.length; i++) {
+    const user = await response.getChannels(invites[i]);
+    const userQuery = await models.User.update(
+      { channelId: user.channel.id },
+      { where: { userId: invites[i]},
+        returning: true,
+        raw: true }
+    );
+    userData.push(userQuery[1][0]);
   }
+  return userData;
+}
+
+const inviteNewUsers = async function (pool, userData) {
+  const inviteString = `This is your invite :) ${pool.desc}`;
+  //logInvite
+  for (let i=0;i<userData.length;i++){
+    await response.sendInvite(userData[i],pool,inviteString)
+  };
+  return userData;
+}

@@ -25,6 +25,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    invited: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    accepted: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    declined: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
     budget: DataTypes.INTEGER,
     desc: DataTypes.STRING,
     closeDate: DataTypes.DATE
