@@ -58,8 +58,11 @@ module.exports = {
   },
   sendInvite: (invited, pool, text) => {
     return web.chat.postMessage({
-      text: text,
+      blocks: text,
       channel: invited.channelId
     });
   },
+  confirmInvites: (event, pool) => {
+
+  }
 }

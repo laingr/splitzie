@@ -7,8 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
-    workplaceId: DataTypes.STRING,
-    adminId: DataTypes.STRING,
+    workplaceId: {
+      type: DataTypes.STRING,
+      required: true
+    },
+    adminId: {
+      type: DataTypes.STRING,
+      required: true
+    },
     open: {
       type: DataTypes.BOOLEAN,
       defaultValue: true

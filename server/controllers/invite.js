@@ -4,6 +4,7 @@ const response = require('./response');
 const models = require('../models');
 const messages = require('../messages');
 const pool =  require('./pool');
+const moment = require('moment');
 
 module.exports = {
   inviteToPool: async (event, last) => {
@@ -13,6 +14,19 @@ module.exports = {
     await addToPool(pool, invites);
     const userData = await getInviteChannels(event, invites);
     await inviteNewUsers(pool, userData);
+    response.text(event, messages.Invite.confirmInvitesSent);
+  },
+  addUser: async (event) => {
+    addUsers(event, event.user);
+  },
+  actionInvite: async (inviteUuid, status) => {
+    updateInvite(inviteUuid, status);
+    //updateDB
+    //send resp
+    //send admin
+  },
+  declineInvite: async () => {
+
   }
 }
 
@@ -75,10 +89,29 @@ const getInviteChannels = async function (event, invites) {
 }
 
 const inviteNewUsers = async function (pool, userData) {
-  const inviteString = `This is your invite :) ${pool.desc}`;
-  //logInvite
+  const desc = pool.desc;
+  const amount = pool.budget;
+  const date = moment(pool.closeDate).format("MMM Do");
   for (let i=0;i<userData.length;i++){
+    const uuid = await models.Invites.create(
+      {
+        PoolUuid: pool.uuid,
+        recipient: userData[i].uuid,
+      }, {returning: true,
+        raw: true}
+        );
+    let inviteString = messages.Invite.sendInvite(desc, amount, date, uuid.uuid);
     await response.sendInvite(userData[i],pool,inviteString)
   };
   return userData;
+};
+
+const updateInvite = async function (uuid, status) {
+  const invite = await models.Invites.update(
+    { status: status },
+    { where: { uuid: uuid},
+      returning: true,
+      raw: true }
+  );
+  return invite.uuid
 }

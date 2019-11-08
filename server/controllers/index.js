@@ -19,13 +19,13 @@ exports.messageReceived = async (event) => {
     if (!last || event.text === 'hi') await response.welcome(event); //welcome flow
     if (last.text === messages.Onboard.invite || event.text[0] === '<') invite.inviteToPool(event,last); //invite flow
     ((Date.now() - last.ts) > 50000)?last.expired = true:last.expired = false; //determine expired time
-    if (!last.expired){ //create flow
+    if (!last.expired && !event.username){ //create flow
       if(last.text === messages.Onboard.askDesc) pool.askBudget(event, last);
       else if(last.text === messages.Onboard.askBudget) pool.askDate(event, last);
       else if(last.text === messages.Onboard.askDate) pool.confirm(event, last);
-      else response.text(event, messages.General.startOver)
+      // else response.text(event, messages.General.startOver)
     }
-    else if (last.expired) response.text(event, messages.General.startOver);
+    else if (last.expired && !event.username) response.text(event, messages.General.startOver);
     else response.text(event, messages.General.unknown);
   } else {
     const botLast = {channel: 'user', text: 'something'};
@@ -35,6 +35,7 @@ exports.messageReceived = async (event) => {
 //action events receiver
 exports.actionReceived = async (req,res) => {
   let payload = JSON.parse(req.body.payload);
+  console.log(payload);
   res.status(200);
   res.send();
   payload.channel_id = payload.channel.id;
@@ -45,13 +46,18 @@ exports.actionReceived = async (req,res) => {
   if (payload.callback_id === 'say_hi') response.text(payload, messages.General.hi); //non-block action say_hi
   if (payload.actions) { //used for all block actions
     let action = payload.actions;
-    if (action[0].value === 'new_pool') {
+    if (action[0].type === 'datepicker') {
+      pool.confirm(payload, action[0]);
+    } else if (action[0].value === 'new_pool') {
       const res = await response.text(payload, messages.General.newPool);
       pool.newPool(payload);
-    } else if (action[0].type === 'datepicker') {
-      pool.confirm(payload, action[0])
-    } 
-    else response.text(payload, messages.General.unknown);
+    } else if (action[0].text.text === `I'm In!`) {
+      invite.actionInvite(action[0].value, 'Confirmed');
+      // pool.confirm(payload, action[0])
+    } else if (action[0].text.text === 'No thanks.') {
+      invite.actionInvite(action[0].value, 'Declined');
+      // pool.confirm(payload, action[0])
+    } else response.text(payload, messages.General.unknown);
   }
 };
 
@@ -86,20 +92,3 @@ const lastLog = function(event) {
     order: [['createdAt', 'DESC']]
   })
 };
-
-// const checkTime = function(event) {
-
-// }
-// exports.createUser = async function (ctx, next) {
-//   const user = await models.User.build(
-//     {authorName: ctx.request.body.authorName, authorId: false}
-//   );
-//   user.save();
-//   ctx.status = 201;
-// };
-
-// exports.getUser = async function (ctx, next) {
-//   const user = await models.User.findAll();
-//   ctx.body = user;
-// };
-
