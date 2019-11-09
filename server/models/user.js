@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     workplaceId: DataTypes.INTEGER,
+    userId: DataTypes.STRING,
     channelId: DataTypes.STRING,
     poolsInvited: DataTypes.ARRAY(DataTypes.INTEGER),
     poolsAccepted: DataTypes.ARRAY(DataTypes.INTEGER),

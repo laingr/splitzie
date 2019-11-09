@@ -8,17 +8,27 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     status: {
-      type: DataTypes.STRING,
-      defaultValue: 'Pending'
+      type: DataTypes.BOOLEAN,
+      defaultValue: null
     },
     recipient: {
+      type: DataTypes.STRING,
+      required: true
+    },
+    channelId: {
       type: DataTypes.STRING,
       required: true
     },
     reminders: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []
-    }
+    },
+    closeDate: {
+      type: DataTypes.DATE,
+      required: true
+    },
+    budget: DataTypes.INTEGER,
+    desc: DataTypes.STRING
   });
 
   Invites.associate = function(models) {

@@ -66,3 +66,5 @@ exports.sendInvite = function (desc, amount, date, uuid) {
 }
 
   exports.confirmInvitesSent = 'Yay, invites have been sent!';
+  exports.confirmInvite = 'Great - Adding you to the list.';
+  exports.declineInvite = 'No problem.';

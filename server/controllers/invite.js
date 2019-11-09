@@ -19,15 +19,10 @@ module.exports = {
   addUser: async (event) => {
     addUsers(event, event.user);
   },
-  actionInvite: async (inviteUuid, status) => {
+  actionInvite: async (payload, inviteUuid, status) => {
     updateInvite(inviteUuid, status);
-    //updateDB
-    //send resp
-    //send admin
+    response.text(payload,status?messages.Invite.confirmInvite:messages.Invite.declineInvite);
   },
-  declineInvite: async () => {
-
-  }
 }
 
 const findPool = async function (payload) {
@@ -96,7 +91,11 @@ const inviteNewUsers = async function (pool, userData) {
     const uuid = await models.Invites.create(
       {
         PoolUuid: pool.uuid,
+        closeDate: pool.closeDate,
         recipient: userData[i].uuid,
+        channelId: userData[i].channelId,
+        desc: pool.desc,
+        budget: pool.budget
       }, {returning: true,
         raw: true}
         );

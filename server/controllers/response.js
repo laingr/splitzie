@@ -62,6 +62,12 @@ module.exports = {
       channel: invited.channelId
     });
   },
+  sendReminder: (invited, text) => {
+    return web.chat.postMessage({
+      blocks: text,
+      channel: invited.channelId
+    });
+  },
   confirmInvites: (event, pool) => {
 
   }

@@ -6,6 +6,9 @@ const invite = require('./invite');
 const response = require('./response');
 const models = require('../models');
 const messages = require('../messages');
+const cron = require('./cron');
+
+cron.reminders.start();
 
 exports.download = async (event) => {
   await response.welcome(event);
@@ -35,7 +38,6 @@ exports.messageReceived = async (event) => {
 //action events receiver
 exports.actionReceived = async (req,res) => {
   let payload = JSON.parse(req.body.payload);
-  console.log(payload);
   res.status(200);
   res.send();
   payload.channel_id = payload.channel.id;
@@ -52,10 +54,10 @@ exports.actionReceived = async (req,res) => {
       const res = await response.text(payload, messages.General.newPool);
       pool.newPool(payload);
     } else if (action[0].text.text === `I'm In!`) {
-      invite.actionInvite(action[0].value, 'Confirmed');
+      invite.actionInvite(payload, action[0].value, true);
       // pool.confirm(payload, action[0])
     } else if (action[0].text.text === 'No thanks.') {
-      invite.actionInvite(action[0].value, 'Declined');
+      invite.actionInvite(payload, action[0].value, false);
       // pool.confirm(payload, action[0])
     } else response.text(payload, messages.General.unknown);
   }
