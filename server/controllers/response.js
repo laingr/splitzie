@@ -68,7 +68,10 @@ module.exports = {
       channel: invited.channelId
     });
   },
-  confirmInvites: (event, pool) => {
-
+  sendReview: (accepted, text) => {
+    return web.chat.postMessage({
+      blocks: text,
+      channel: accepted.adminChannel
+    });
   }
 }

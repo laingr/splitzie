@@ -17,12 +17,13 @@ module.exports = {
     response.text(event, messages.Invite.confirmInvitesSent);
   },
   addUser: async (event) => {
-    addUsers(event, event.user);
+    addUsers(event, [event.user.id]||event.user);
   },
   actionInvite: async (payload, inviteUuid, status) => {
     updateInvite(inviteUuid, status);
     response.text(payload,status?messages.Invite.confirmInvite:messages.Invite.declineInvite);
-  },
+    // pool¸response. //forgot what i
+  }
 }
 
 const findPool = async function (payload) {

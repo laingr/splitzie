@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   var Pool = sequelize.define('Pool', {
     uuid: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV1,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
     workplaceId: {
@@ -15,9 +15,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true
     },
+    adminChannel: {
+      type: DataTypes.STRING,
+      required: true
+    },
     open: {
       type: DataTypes.BOOLEAN,
       defaultValue: true
+    },
+    recapSent: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     numInvited: {
       type: DataTypes.INTEGER,
@@ -46,10 +54,13 @@ module.exports = (sequelize, DataTypes) => {
     budget: DataTypes.INTEGER,
     desc: DataTypes.STRING,
     closeDate: DataTypes.DATE
-  });
+    });
 
   Pool.associate = function(models) {
-    Pool.belongsTo(models.User);
+    Pool.belongsTo(models.User)
+    };
+  Pool.associate = function(models) {
+    models.Pool.hasMany(models.Invites);
   };
 
   return Pool;

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   var Invites = sequelize.define('Invites', {
     uuid: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV1,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
     status: {
@@ -19,20 +19,25 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true
     },
-    reminders: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: []
+    reminderSent: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     closeDate: {
       type: DataTypes.DATE,
       required: true
     },
     budget: DataTypes.INTEGER,
-    desc: DataTypes.STRING
+    desc: DataTypes.STRING,
+    paid : {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   });
 
   Invites.associate = function(models) {
-    Invites.belongsTo(models.Pool);
+    models.Invites.belongsTo(models.Pool);
+    // models.Invites.belongsTo(models.User)
   };
 
   return Invites;

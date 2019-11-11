@@ -3,17 +3,29 @@
 const moment = require('moment');
 const pool = require('./pool');
 const invite = require('./invite');
+const pay = require('./pay');
 const response = require('./response');
 const models = require('../models');
 const messages = require('../messages');
+const admin = require('./admin');
 const cron = require('./cron');
 
-cron.reminders.start();
+// cron.reminders.start();
 
-exports.download = async (event) => {
-  await response.welcome(event);
-//install new user?  log(event);
-};
+exports.adminQuery = async (req, res) => {
+  let user = req.query.user;
+  const userInfo = await admin.getUserData(user);
+  const pools = await admin.getPoolData(user);
+  const invites = await admin.getInviteData(userInfo.uuid);
+  console.log(pools);
+  user = {
+    info:userInfo,	
+    pools:pools,
+    invites:invites
+    };
+  res.status(200);
+  res.send(JSON.stringify(user));
+}
 
 //message events receiver
 exports.messageReceived = async (event) => {
@@ -23,6 +35,7 @@ exports.messageReceived = async (event) => {
     if (last.text === messages.Onboard.invite || event.text[0] === '<') invite.inviteToPool(event,last); //invite flow
     ((Date.now() - last.ts) > 50000)?last.expired = true:last.expired = false; //determine expired time
     if (!last.expired && !event.username){ //create flow
+      console.log(event);
       if(last.text === messages.Onboard.askDesc) pool.askBudget(event, last);
       else if(last.text === messages.Onboard.askBudget) pool.askDate(event, last);
       else if(last.text === messages.Onboard.askDate) pool.confirm(event, last);
@@ -55,10 +68,10 @@ exports.actionReceived = async (req,res) => {
       pool.newPool(payload);
     } else if (action[0].text.text === `I'm In!`) {
       invite.actionInvite(payload, action[0].value, true);
-      // pool.confirm(payload, action[0])
     } else if (action[0].text.text === 'No thanks.') {
       invite.actionInvite(payload, action[0].value, false);
-      // pool.confirm(payload, action[0])
+    } else if (action[0].text.text === 'Yup!') {
+      pay.actionPay(payload, action[0].value, true);
     } else response.text(payload, messages.General.unknown);
   }
 };

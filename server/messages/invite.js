@@ -9,7 +9,7 @@ exports.sendInvite = function (desc, amount, date, uuid) {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `Hey there! You've been invited to a Splitzie! Here's the info - let me know if you'd like to particiapte by *${date}* and I'll keep track of everything`
+        "text": `Hey there! You've been invited to a Splitzie! \n\nI've outlined a description and expected budget per person below. Please respond by *${date}* if you'd like to be included :)`
       }
     },
     {
@@ -19,7 +19,7 @@ exports.sendInvite = function (desc, amount, date, uuid) {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `${desc}\n:star::star::star::star:`
+        "text": `🥳 ${desc}`
       }
       // ,
       // "accessory": {
@@ -32,7 +32,7 @@ exports.sendInvite = function (desc, amount, date, uuid) {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `*$${amount}*\n:dollar::dollar:`
+        "text": `💵 The expected budget per person is *$${amount}*`
       }
     },
     {
@@ -65,6 +65,6 @@ exports.sendInvite = function (desc, amount, date, uuid) {
   return invite;
 }
 
-  exports.confirmInvitesSent = 'Yay, invites have been sent!';
-  exports.confirmInvite = 'Great - Adding you to the list.';
+  exports.confirmInvitesSent = `Yay 🙌, they've been invited!`;
+  exports.confirmInvite = '👍 Great - Adding you to the list.';
   exports.declineInvite = 'No problem.';
