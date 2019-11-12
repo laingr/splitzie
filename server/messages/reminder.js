@@ -19,7 +19,7 @@ exports.sendReminder = function (desc, amount, date, uuid) {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `${desc}\n:star::star::star::star:`
+        "text": `✨✨✨\n${desc}`
       }
       // ,
       // "accessory": {
@@ -32,7 +32,7 @@ exports.sendReminder = function (desc, amount, date, uuid) {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `*$${amount}*\n:dollar::dollar:`
+        "text": `:dollar:\n*$${amount}*`
       }
     },
     {

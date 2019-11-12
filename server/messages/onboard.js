@@ -31,6 +31,26 @@ exports.Welcome =
 	}
 ]
 
+exports.dashboard =
+[
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "Click to access your Splitzie dashboard --> "
+		},
+		"accessory": {
+			"type": "button",
+			"text": {
+				"type": "plain_text",
+				"text": "Ok",
+				"emoji": true
+			},
+			"url": "http://localhost:8080"
+		}
+	}
+]
+
 exports.askDate =
 [
 	{
@@ -53,5 +73,5 @@ exports.askDate =
 
 exports.askDesc = `In one message, what's this Splitzie for? This will be sent to your guests, so try to be as descriptive as you can :)`;
 exports.askBudget = `What's the expected budget you'd like people to contribute?`;
-exports.confirm = `Perfect - I've created a Splitzie for you with the information below:`;
+exports.confirm = `Perfect - I've created a Splitzie for you with the information below:\n\n`;
 exports.invite = `Now time to invite others. Let me know who you want to include by sending me their slack '@' handle.`;

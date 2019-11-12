@@ -16,7 +16,7 @@ module.exports = {
 
 const updatePay = function (uuid) {
   models.Invites.update(
-    { paid: true },
+    { paid: 1 },
     { where: { uuid: uuid},
       returning: true,
       raw: true }

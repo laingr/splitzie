@@ -15,6 +15,8 @@ module.exports = {
     const userData = await getInviteChannels(event, invites);
     await inviteNewUsers(pool, userData);
     response.text(event, messages.Invite.confirmInvitesSent);
+    console.log(event);
+    response.sendDashboard(event, messages.Onboard.dashboard);
   },
   addUser: async (event) => {
     addUsers(event, [event.user.id]||event.user);
@@ -22,7 +24,6 @@ module.exports = {
   actionInvite: async (payload, inviteUuid, status) => {
     updateInvite(inviteUuid, status);
     response.text(payload,status?messages.Invite.confirmInvite:messages.Invite.declineInvite);
-    // pool¸response. //forgot what i
   }
 }
 
@@ -44,11 +45,13 @@ const inviteParse = function (text) {
 }
 
 const addUsers = async function (event, users) {
+  console.log(event);
   for (let i=0;i<users.length;i++){
     await models.User.findOrCreate(
     {
       userId: users[i],
       workplaceId: event.team.id,
+      firstName:event.user.name,
       // channelId: DataTypes.STRING,
       poolsInvited: [],
       poolsAccepted: [],

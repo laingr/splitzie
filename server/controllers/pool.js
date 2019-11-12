@@ -86,13 +86,13 @@ const getPools = async () => {
       'budget',
       'uuid',
       'adminChannel',
-      [sequelize.fn('COUNT', sequelize.col('Invites.uuid')),'AcceptedInvites']
+      [sequelize.fn('SUM', sequelize.col('Invites.status')),'AcceptedInvites']
     ],
     include: [{
       model: models.Invites,
       attributes: [],
       where: {
-        'status': true
+        'status': 1
       },
       include: []
     }],

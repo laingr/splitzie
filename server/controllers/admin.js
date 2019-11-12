@@ -26,7 +26,8 @@ const findPools = async function (user) {
       'budget',
       'uuid',
       'adminChannel',
-      [sequelize.fn('COUNT', sequelize.col('Invites.uuid')),'AcceptedInvites']
+      'closeDate',
+      [sequelize.fn('SUM', sequelize.col('Invites.status')),'AcceptedInvites']
     ],
     include: [{
       model: models.Invites,
@@ -34,6 +35,7 @@ const findPools = async function (user) {
       include: []
     }],
     group: ['Pool.uuid'],
+    order: [['createdAt', 'desc']],
     where: { 
       'adminId': user 
     },
@@ -61,7 +63,7 @@ const findUser = async function (user) {
 
 const findInvites = async function (user) {
   const invite = await models.Invites.findAll(
-    { where: { uuid: user},
+    { where: { recipient: user},
       returning: true,
       raw: true }
   );

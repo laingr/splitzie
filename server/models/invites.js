@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       defaultValue: null
     },
     recipient: {
@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     budget: DataTypes.INTEGER,
     desc: DataTypes.STRING,
     paid : {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     }
   });
 

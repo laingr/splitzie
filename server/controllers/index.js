@@ -17,7 +17,6 @@ exports.adminQuery = async (req, res) => {
   const userInfo = await admin.getUserData(user);
   const pools = await admin.getPoolData(user);
   const invites = await admin.getInviteData(userInfo.uuid);
-  console.log(pools);
   user = {
     info:userInfo,	
     pools:pools,
@@ -41,7 +40,7 @@ exports.messageReceived = async (event) => {
       else if(last.text === messages.Onboard.askDate) pool.confirm(event, last);
       // else response.text(event, messages.General.startOver)
     }
-    else if (last.expired && !event.username) response.text(event, messages.General.startOver);
+    // else if (last.expired && !event.username) response.text(event, messages.General.startOver);
     else response.text(event, messages.General.unknown);
   } else {
     const botLast = {channel: 'user', text: 'something'};
@@ -67,17 +66,15 @@ exports.actionReceived = async (req,res) => {
       const res = await response.text(payload, messages.General.newPool);
       pool.newPool(payload);
     } else if (action[0].text.text === `I'm In!`) {
-      invite.actionInvite(payload, action[0].value, true);
+      invite.actionInvite(payload, action[0].value, 1);
     } else if (action[0].text.text === 'No thanks.') {
-      invite.actionInvite(payload, action[0].value, false);
+      invite.actionInvite(payload, action[0].value, 0);
     } else if (action[0].text.text === 'Yup!') {
-      pay.actionPay(payload, action[0].value, true);
+      pay.actionPay(payload, action[0].value, 1);
+    } else if (action[0].text.text === 'Ok') {
+      console.log('ok')// invite.actionDash(payload, action[0].value);
     } else response.text(payload, messages.General.unknown);
   }
-};
-
-exports.timedMessage = () => {
-
 };
 
 //message logger to db

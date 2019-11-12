@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 
 const { createEventAdapter } = require('@slack/events-api');
 const express = require('express');
+const cors = require('cors');
 const secret = process.env.SLACK_SIGNING_SECRET;
 const port = process.env.PORT || 3000;
 
@@ -17,7 +18,8 @@ const app = express();
 
 app.use('/slack/events', slackEvents.expressMiddleware());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 app.use(router);
 

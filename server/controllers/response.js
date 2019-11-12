@@ -68,6 +68,18 @@ module.exports = {
       channel: invited.channelId
     });
   },
+  sendReminder: (invited, text) => {
+    return web.chat.postMessage({
+      blocks: text,
+      channel: invited.channelId
+    });
+  },
+  sendDashboard: (invited, text) => {
+    return web.chat.postMessage({
+      blocks: text,
+      channel: invited.channel
+    });
+  },
   sendReview: (accepted, text) => {
     return web.chat.postMessage({
       blocks: text,

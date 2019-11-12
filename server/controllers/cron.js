@@ -23,12 +23,12 @@ exports.reminders = cron.schedule("*/10 * * * *", async () => {
   console.log("invite cron task every 10 min");
 });
 
-exports.complete = cron.schedule("*/20 * * * *", async () => {
+exports.complete = cron.schedule("*/20 * * * * *", async () => {
   await pool.adminReview();
   console.log("review cron task every 20 min");
 });
 
-exports.payment = cron.schedule("*/10 * * * *", async () => {
+exports.payment = cron.schedule("*/20 * * * *", async () => {
   const payments = await getPayments();
   console.log(payments);
   for (let i = 0; i < payments.length; i++) {
@@ -63,8 +63,8 @@ const getInvites = () =>
     where: {
       closeDate: { [gt]: Date.now() - 86400000},
       closeDate: { [lte]: Date.now() + 86400000 },
-      status: true,
-      paid: false
+      status: 1,
+      paid: 0
     },
     options: {
       raw: true,
