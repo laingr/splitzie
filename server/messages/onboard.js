@@ -1,7 +1,4 @@
 
-//Welcome msg
-//New Splitzie Flow: Desc, Date, Budget, Invite, Confirmation
-
 exports.Welcome =
 [
 	{

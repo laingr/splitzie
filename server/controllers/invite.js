@@ -52,7 +52,6 @@ const addUsers = async function (event, users) {
       userId: users[i],
       workplaceId: event.team.id,
       firstName:event.user.name,
-      // channelId: DataTypes.STRING,
       poolsInvited: [],
       poolsAccepted: [],
       poolsCompleted: [],

@@ -61,8 +61,6 @@ const createPool = async function (payload, adminChannel) {
       adminId: payload.user.id,
       adminChannel: adminChannel[1][0].channelId
     })
-    // , {include: [models.User]});
-    // pool.save();
   }
 
 const findPool = async function (payload) {

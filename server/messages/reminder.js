@@ -1,6 +1,3 @@
-//Admin reminder about due date
-//Guest reminder about due date
-//Guest reminder about payment (if not recieved)
 
 exports.sendReminder = function (desc, amount, date, uuid) {
   const reminder =
@@ -21,12 +18,6 @@ exports.sendReminder = function (desc, amount, date, uuid) {
         "type": "mrkdwn",
         "text": `✨✨✨\n${desc}`
       }
-      // ,
-      // "accessory": {
-      //   "type": "image",
-      //   "image_url": "https://picsum.photos/200",
-      //   "alt_text": "alt text for image"
-      // }
     },
     {
       "type": "section",

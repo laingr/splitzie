@@ -21,12 +21,6 @@ exports.sendInvite = function (desc, amount, date, uuid) {
         "type": "mrkdwn",
         "text": `🥳 ${desc}`
       }
-      // ,
-      // "accessory": {
-      //   "type": "image",
-      //   "image_url": "https://picsum.photos/200",
-      //   "alt_text": "alt text for image"
-      // }
     },
     {
       "type": "section",

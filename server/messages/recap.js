@@ -1,5 +1,3 @@
-//Admin recap
-//Guest recap
 
 exports.sendReview = function (adminChannel, desc, amount, people) {
   const reminder =

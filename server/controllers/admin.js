@@ -57,7 +57,6 @@ const findUser = async function (user) {
         userId: user
       }
     });
-  // console.log(userInfo.dataValues);
   return userInfo.dataValues;
 };
 
