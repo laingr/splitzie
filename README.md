@@ -5,6 +5,6 @@ Splitzie is a JavaScript based Slackbot service which helps organize and track p
 
 <object data="./splitzie_presentation.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="./splitzie_presentation.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="./splitzie_presentation.pdf">Download PDF</a>.</p>
+        <p>Checkout the overview deck here: <a href="./splitzie_presentation.pdf">Download PDF</a>.</p>
     </embed>
 </object>
