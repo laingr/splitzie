@@ -11,4 +11,4 @@ Splitzie is a JavaScript based Slackbot service which helps organize and track p
 
 Accept Flow:
 
-![Alt Text](./videos/acceptflow.gif)
+![](acceptflow.gif)
